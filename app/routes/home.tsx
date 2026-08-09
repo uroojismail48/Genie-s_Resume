@@ -2,6 +2,9 @@ import Navbar from "~/components/Navbar";
 import type { Route } from "./+types/home";
 import { resumes } from '../../constants/index';
 import ResumeCards from "~/components/ResumeCards";
+import { usePuterStore } from "~/libs/puter";
+import { useNavigate } from "react-router";
+import { useEffect } from "react";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -11,7 +14,20 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-return <main  className="flex items-center flex-col  w-full h-screen gap-10">
+
+const { auth } = usePuterStore()
+
+const navigate = useNavigate()
+
+useEffect(() => 
+{
+  if(!auth.isAuthenticated)navigate('/auth?next=/')
+  },
+[auth.isAuthenticated]
+)
+
+return( 
+<main  className="flex items-center flex-col  w-full h-screen gap-10">
   <Navbar/>
   <section className="h-50 w-auto flex justify-center items-center">
     <div className="gap-2 w-full flex justify-center items-center flex-col">
@@ -32,4 +48,6 @@ return <main  className="flex items-center flex-col  w-full h-screen gap-10">
   )}
 
 </main>
+)
 }
+
